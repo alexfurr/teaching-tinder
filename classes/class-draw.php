@@ -6,6 +6,7 @@ class teaching_tinder_draw
 
         $filter_menu = ''; // The filter menu
         $opp_list_str = ''; // Main opp list string
+        $search_str_feedback = '';
 
         $now = date('Y-m-d H:i:s');
 
@@ -30,6 +31,12 @@ class teaching_tinder_draw
             }
         }
 
+        if(isset($_POST['tt_search']) )
+        {
+            $filter_args['search'] = $_POST['tt_search'];
+            $search_str_feedback = '<div class="tt_search_feedback">Search results for "'.$_POST['tt_search'].'"</div>';
+        }
+
         $opp_list = teaching_tinder_queries::get_opps($filter_args);
 
         // Get a series of lookup arrays for the meta data
@@ -37,7 +44,10 @@ class teaching_tinder_draw
         $cohorts = teaching_tinder_queries::get_cat_items('tt_cohort');
         $modules = teaching_tinder_queries::get_cat_items('tt_module');
 
-        $filter_menu.='<div class="tt_filter"> Filter : <i class="fas fa-filter"></i> ';
+        $filter_menu.='<form action="?action=search" method="post">';
+        $filter_menu.='<div class="tt_filter">';
+
+        $filter_menu.='<div class="tt_filter_types">Filter : <i class="fas fa-filter"></i> ';
 
         $filter_menu.='<a href="?filter=off">Show All</a> | ';
         foreach ($event_types as $event_type_id => $event_type_name)
@@ -63,7 +73,16 @@ class teaching_tinder_draw
             }
             $filter_menu.=' | ';
         }
-        $filter_menu.='</div><br/>';
+        $filter_menu.='</div>';
+
+
+        $filter_menu.='<div class="filter_search">';
+        $filter_menu.='<input type="text" name="tt_search" class="tt_search_box"><input class="imperial-button" type="submit" value="search">';
+        $filter_menu.='</div>';
+        $filter_menu.='</div></form>';
+
+
+
 
 
         $opp_list_str.= '<div class="tt_list_wrapper">';
@@ -157,7 +176,7 @@ class teaching_tinder_draw
         }
         $opp_list_str.='</div>';
 
-        return $filter_menu.$opp_list_str;
+        return $filter_menu.$search_str_feedback.$opp_list_str;
 
    }
 

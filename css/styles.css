@@ -97,4 +97,26 @@
     padding:10px;
     font-size:12px;
     margin-top:20px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items: center;
+}
+
+
+
+.tt_filter .filter_search
+{
+    margin-left:auto;
+
+}
+.tt_filter .filter_search .tt_search_box
+{
+    padding:8px;
+}
+
+.tt_search_feedback
+{
+    padding:10px;
+    border:1px solid #ccc;
+    margin:10px 0px;
 }

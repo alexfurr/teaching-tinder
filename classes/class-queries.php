@@ -18,6 +18,12 @@ class teaching_tinder_queries
             );
         }
 
+
+
+
+
+
+
         $args = array(
             'posts_per_page'   => -1,
             'orderby'           => 'title',
@@ -27,6 +33,26 @@ class teaching_tinder_queries
             'meta_query'        => $meta_query_array,
 
         );
+
+
+        // Check for search
+        if(isset($filter_args['search']) )
+        {
+            $search_str = $filter_args['search'];
+            $args["s"] = $search_str;
+
+            /*
+
+            $args['_meta_or_title'] = $search_str; //not using 's' anymore
+
+            $meta_query_array[]   = array(
+                array( 'key' => 'who', 'value' => $search_str, 'compare' => 'LIKE' ),
+                'relation' => 'OR'
+            );
+            */
+
+
+        }
 
         $posts_array = get_posts( $args );
         $items_array = array();
@@ -87,15 +113,25 @@ class teaching_tinder_queries
 
     }
 
-    public static function get_opp_date_info($item_id)
+    public static function get_opp_date_info($date_id)
     {
         global $wpdb;
         global $tt_opp_dates_table;
 
-        $sql = "SELECT * FROM $tt_opp_dates_table WHERE id= $item_id";
+        $sql = "SELECT * FROM $tt_opp_dates_table WHERE id= $date_id";
 
         $date_info =  $wpdb->get_row( $sql );
         return $date_info;
+    }
+
+    public static function get_users_by_opp_date($date_id)
+    {
+        global $wpdb;
+        global $tt_opp_dates_table_interest;
+
+        $sql = "SELECT * FROM $tt_opp_dates_table_interest WHERE id= $date_id";
+        $my_users =  $wpdb->get_results( $sql );
+        return $my_users;
     }
 
 
