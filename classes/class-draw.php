@@ -83,13 +83,20 @@ class teaching_tinder_draw
 
 
 
+        if(count($opp_list)==0 )
+        {
+            $opp_list_str.='No opporunities found';
+        }
 
 
-        $opp_list_str.= '<div class="tt_list_wrapper">';
+        $opp_list_str.= '<div class="tt_list_wrapper" id="tt_listener_wrap">';
+        $opp_count=0;
         foreach ($opp_list as $item_id => $item_meta)
         {
             // Get the dates for this opportunity
             $opp_dates = teaching_tinder_queries::get_opp_dates($item_id);
+
+
             $date_count = count($opp_dates);
             if($date_count==0) // if there are NO dates then skip
             {
@@ -113,35 +120,70 @@ class teaching_tinder_draw
                 $valid_dates_array[] = $start_date;
             }
 
+
             $valid_dates_count = count($valid_dates_array);
+
+            if($valid_dates_count==0){continue;} // Skip it if there are no dates
             $permalink = get_the_permalink($item_id);
             $title = get_the_title($item_id);
 
             $event_type = $item_meta['event_type'];
+
             $event_type_name = get_term( $event_type )->name;
             $this_background = get_option('event_color_'.$event_type);
 
+            // Get the faded colour
+            $faded_color = tt_opps_utils::adjust_brightness($this_background, 50);
+
+
             $role_type = $item_meta['role_type'];
             $role_type_name = get_term( $role_type )->name;
+            $role_type_img = z_taxonomy_image_url($role_type);
+
+
+
+
+            $opp_list_str.= '<div class="tt_item" id="item_wrap_'.$item_id.'">';
 
             $opp_list_str.='<a href="'.$permalink.'">';
-            $opp_list_str.= '<div class="tt_item">';
-
             $opp_list_str.='<div style="background:#'.$this_background.'">';
             $opp_list_str.='<div class="tt_item_title">';
+
+            // Type image
+            $opp_list_str.='<div class="role_type_img">';
+            if($role_type_img)
+            {
+                $opp_list_str.='<img src="'.$role_type_img.'">';
+            }
+            $opp_list_str.='</div>';
+
+            // Type Title
+            $opp_list_str.='<div class="role_type_name">';
             $opp_list_str.=$event_type_name.' : '.$role_type_name;
             $opp_list_str.='</div>';
+
+            // Nav Arrow
+            $opp_list_str.='<div class="tt_item_nav">';
+            $opp_list_str.='<i class="fas fa-chevron-circle-right fa-3x"></i>';
             $opp_list_str.='</div>';
+
+            $opp_list_str.='</div>';
+            $opp_list_str.='</div>';
+            $opp_list_str.='</a>';
+
+
+
+            $opp_list_str.='<div class="tt_item_meta_wrap" style="background:'.$faded_color.';">';
 
             $opp_list_str.='<div class="tt_item_subtitle">';
             $opp_list_str.=$title;
+            // Show the hide button
+            $opp_list_str.='<div class="hide_opp_wrap"><button class="imperial-button"><span data-id="'.$item_id.'" data-method="hide_opp" class="smallText has-click-event" id="hide_event_button_'.$item_id.'">Hide opportunity</span></button></a></div>';
+
             $opp_list_str.='</div>';
 
-
-
-            $opp_list_str.='<div class="tt_item_meta_wrap">';
             $opp_list_str.='<div class="tt_item_meta">';
-            $opp_list_str.='<h3>Who will I be helping?</h3>';
+            $opp_list_str.='<h3>Who are the students?</h3>';
             $opp_list_str.= $cohorts[$item_meta['cohort']];
             $opp_list_str.= '<br/><span class="smallText">'.$modules[$item_meta['module']].'</span>';
             $opp_list_str.='<br/>';
@@ -154,27 +196,31 @@ class teaching_tinder_draw
             $first_date_str = $date_obj->format("l jS F, Y");
             $other_dates = $valid_dates_count-1;
 
-            $opp_list_str.='<h3>Available Dates</h3>';
+            $opp_list_str.='<h3>First available date</h3>';
 
             $opp_list_str.= $first_date_str.'<br/>';
             if($other_dates>=1)
             {
-                $opp_list_str.='<span class="smallText">'.$other_dates.' other date(s) available</span>';
+                $opp_list_str.='<span class="smallText">'.$other_dates.' later date(s) available</span>';
             }
             $opp_list_str.='</div>';
 
 
-            $opp_list_str.='<div class="tt_item_nav" style="color:#'.$this_background.'">';
-            $opp_list_str.='<i class="fas fa-chevron-circle-right fa-5x"></i>';
-            $opp_list_str.='</div>';
 
             $opp_list_str.='</div>';
 
-            $opp_list_str.='</div></a>';
+            $opp_list_str.='</div>';
+
+            $opp_count++;
 
 
         }
         $opp_list_str.='</div>';
+
+        if($opp_count==0)
+        {
+            $opp_list_str = '<br/>No opportunities found';
+        }
 
         return $filter_menu.$search_str_feedback.$opp_list_str;
 

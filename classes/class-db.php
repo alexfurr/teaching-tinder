@@ -4,7 +4,7 @@ $tt_database = new tt_database();
 
 class tt_database
 {
-	var $DBversion 		= '1.6';
+	var $DBversion 		= '2.0';
 
 	//~~~~~
 	function __construct ()
@@ -14,9 +14,11 @@ class tt_database
         global $wpdb;
         global $tt_opp_dates_table;
         global $tt_opp_dates_table_interest;
+        global $tt_opp_dates_table_hidden;
 
         $tt_opp_dates_table = $wpdb->prefix . 'tt_opp_dates';
         $tt_opp_dates_table_interest = $wpdb->prefix . 'tt_opp_dates_interest';
+        $tt_opp_dates_table_hidden = $wpdb->prefix . 'tt_opp_dates_hidden';
 	}
 
 	//~~~~~
@@ -46,6 +48,7 @@ class tt_database
         global $wpdb;
         global $tt_opp_dates_table;
         global $tt_opp_dates_table_interest;
+        global $tt_opp_dates_table_hidden;
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -60,6 +63,7 @@ class tt_database
             end_date datetime,
 			location longtext,
             visibility tinyint,
+            spaces int,
             status  tinyint,
 			INDEX opp_id (opp_id),
 			PRIMARY KEY (id)
@@ -75,9 +79,21 @@ class tt_database
             date_id int,
             username varchar(50),
             date_added datetime,
-            INDEX opp_id (opp_id),
+            INDEX date_id (date_id),
             INDEX username (username),
-            INDEX lookup_both (opp_id,username),
+            INDEX lookup_both (date_id,username),
+            PRIMARY KEY (id)
+
+       ) $charset_collate;";
+
+       $feedback = dbDelta( $sql );
+
+       //users hidden table
+       $sql = "CREATE TABLE $tt_opp_dates_table_hidden (
+           id mediumint(9) NOT NULL AUTO_INCREMENT,
+            opp_id int,
+            username varchar(50),
+            INDEX username (username),
             PRIMARY KEY (id)
 
        ) $charset_collate;";

@@ -23,6 +23,7 @@ include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-queries.php' );
 include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-db.php' );
 include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-actions.php' );
 include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-ajax.php' );
+include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-utils.php' );
 
 //include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-database.php' );
 //include_once( ICL_TEACHING_TINDER_PATH . 'classes/class-cpt-admin-setup.php' );

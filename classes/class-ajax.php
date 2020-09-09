@@ -19,7 +19,11 @@ class tt_ajax
 
         // Front End
         add_action( 'wp_ajax_express_interest_toggle', array($this, 'express_interest_toggle' ));
-        add_action( 'wp_ajax_nopriv_express_interest_toggle', array($this, 'express_interest_toggle' ));
+        //add_action( 'wp_ajax_nopriv_express_interest_toggle', array($this, 'express_interest_toggle' ));
+
+        add_action( 'wp_ajax_hide_opportunity', array($this, 'hide_opportunity' ));
+
+
 
 	}
 	public function express_interest_toggle()
@@ -90,6 +94,33 @@ class tt_ajax
         die();
 
 	}
+
+
+    public function hide_opportunity()
+    {
+
+        global $wpdb;
+        global $tt_opp_dates_table_hidden;
+
+      // Check the AJAX nonce
+        check_ajax_referer( 'icl_tt_ajax_nonce', 'security' );
+
+        $logged_in_username = imperialNetworkUtils::get_current_username();
+        $opp_id = $_POST['opp_id'];
+
+
+        $wpdb->query( $wpdb->prepare(
+        "INSERT INTO ".$tt_opp_dates_table_hidden." (opp_id, username)
+        VALUES ( %d, %s)",
+        array(
+            $opp_id,
+            $logged_in_username,
+            )
+        ));
+        
+        die();
+
+    }
 
 } // End Class
 ?>

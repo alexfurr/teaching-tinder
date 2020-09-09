@@ -1,8 +1,4 @@
-.tt_list_wrapper .tt_item:hover
-{
-    border:1px solid #000;
-    background:#f7f7f7
-}
+
 
 .tt_item
 {
@@ -11,16 +7,25 @@
     border:1px solid #ccc;
 }
 
-.tt_item_title
+.tt_item_title, .tt_item_title_page
 {
-    padding:17px;
+    padding:8px;
     font-weight:bold;
     font-size:16px;
+    display:flex;
+    align-items: center;
+}
+
+
+
+/* Title on the template page */
+.tt_item_title_page
+{
+    padding:10px 10px 20px 20px;
 }
 
 .tt_item_subtitle
 {
-    padding:10px 10px 0px 20px;
     font-size:32px;
 }
 
@@ -54,8 +59,10 @@
 
 .tt_item_nav
 {
+    margin-left:auto;
     text-align:right;
     margin-right:20px;
+    color:#fff;
 }
 
 
@@ -89,6 +96,7 @@
     border:1px solid #ccc;
     padding:15px;
     margin:10px;
+    min-width:350px;
 }
 
 .tt_filter
@@ -119,4 +127,15 @@
     padding:10px;
     border:1px solid #ccc;
     margin:10px 0px;
+}
+
+
+/* Category images */
+.role_type_img
+{
+    margin-right:20px;
+}
+.role_type_img img
+{
+    width:60px;
 }

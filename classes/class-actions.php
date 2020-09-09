@@ -15,6 +15,7 @@ class teaching_tinder_actions
         $opp_id = $_POST['opp_id'];
         $opp_date = $_POST['opp_date'];
         $location = $_POST['location'];
+        $spaces = $_POST['spaces'];
 
 
         $start_time = $_POST['start_time_hour'].':'.$_POST['start_time_min'];
@@ -32,6 +33,7 @@ class teaching_tinder_actions
                 $activity_title,
                 $activity_content,
                 $activity_date,
+                $spaces,
                 $item_id
             ));
 
@@ -43,13 +45,14 @@ class teaching_tinder_actions
         {
 
             $wpdb->query( $wpdb->prepare(
-            "INSERT INTO ".$tt_opp_dates_table." (opp_id, start_date, end_date, location, status, visibility)
-            VALUES ( %d, %s, %s, %s, %d, %d )",
+            "INSERT INTO ".$tt_opp_dates_table." (opp_id, start_date, end_date, location, spaces, status, visibility)
+            VALUES ( %d, %s, %s, %s, %d, %d, %d )",
             array(
                 $opp_id,
                 $start_date,
                 $end_date,
                 $location,
+                $spaces,
                 1,
                 1
                 )

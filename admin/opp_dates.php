@@ -18,6 +18,7 @@ $opp_date = '';
 $location = '';
 $start_time = '';
 $end_time = '';
+$spaces='';
 
 // Add dates
 $args = array(
@@ -59,6 +60,16 @@ $args = array(
 );
 echo ek_forms::form_item($args);
 
+$args = array(
+    "type" => "dropdown",
+    "name" => "spaces",
+    "value" => $spaces,
+    "ID" => "spaces",
+    "label" => "Available Spaces",
+    "options" => array(1,2,3,4,5,6),
+);
+echo ek_forms::form_item($args);
+
 echo '<input type="hidden" value="'.$opp_id.'" name="opp_id" />';
 
 echo '<input type="submit" value="Submit" class="button-primary"/>';
@@ -82,7 +93,7 @@ else
     echo '<tr>';
     echo '<th width="2px"><label>';
     echo '<input type="checkbox" id="checkall" value="1" onclick="javascript:checkCheckboxes(this.id);" ></label></th>';
-    echo '<th>Date</th><th>Interest</th><th>Location</th><th>Status</th><th>Visibility</th></tr>';
+    echo '<th>Date</th><th>Spaces</th><th>Interest</th><th>Location</th><th>Status</th><th>Visibility</th></tr>';
     foreach($opp_dates as $date_meta)
     {
         $date_id  = $date_meta->id;
@@ -91,6 +102,7 @@ else
         $end_date  = $date_meta->end_date;
         $status  = $date_meta->status;
         $visibility  = $date_meta->visibility;
+        $spaces  = $date_meta->spaces;
 
         $date_obj = new DateTime($start_date);
         $opp_date_str = $date_obj->format("l jS F, Y, g:i a");
@@ -128,6 +140,7 @@ else
         echo '<td width="10px" valign="top"><input type="checkbox" name="check_list[]" value="'.$date_id.'" id="delete_'.$date_id.'"></td>';
         echo '<td>';
         echo '<label for="delete_'.$date_id.'">'.$opp_date_str.'</label></td>';
+        echo '<td>'.$spaces.'</td>';
         echo '<td>';
 
         echo $user_count.' people';

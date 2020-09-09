@@ -186,7 +186,7 @@ class ek_forms
                 // Now add the time drop downs
                 $html.='<div>';
                 $html.='<label for="'.$ID.'_hour">Time</label>';
-                $html.= imperialNetworkDraw::draw_time_picker( $hour_value, $min_value, $ID."_hour", $ID."_min");
+                $html.= ek_forms::draw_time_picker( $hour_value, $min_value, $ID."_hour", $ID."_min");
                 $html.='</div>';
 
 
@@ -207,7 +207,7 @@ class ek_forms
 
                 $html.='<div>';
                 $html.='<label for="'.$ID.'_hour">'.$label.'</label>';
-                $html.= imperialNetworkDraw::draw_time_picker( $hour_value, $min_value, $ID."_hour", $ID."_min");
+                $html.= ek_forms::draw_time_picker( $hour_value, $min_value, $ID."_hour", $ID."_min");
                 $html.='</div>';
             break;
 
@@ -356,6 +356,10 @@ class ek_forms
 
         return $output;
     }
+
+
+
+
 }
 
 

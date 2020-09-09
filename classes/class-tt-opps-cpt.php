@@ -144,6 +144,8 @@ class tt_opps
             "cohort",
             "module",
             "who",
+            "tasks",
+            "support",
             "primary_contact",
             "primary_contact_email",
             "interest_email_contact",
@@ -182,6 +184,25 @@ class tt_opps
 		);
 
 
+        //Type
+        $id 			= 'tt_meta_opp_type';
+        $title 			= 'Type of Opportunity';
+        $drawCallback 	= array( $this, 'draw_metabox_type_meta' );
+        $screen 		= 'tt_opp';
+        $context 		= 'side';
+        $priority 		= 'default';
+        $callbackArgs 	= array();
+
+        add_meta_box(
+            $id,
+            $title,
+            $drawCallback,
+            $screen,
+            $context,
+            $priority,
+            $callbackArgs
+        );
+
         //Students
         $id 			= 'tt_meta_students';
         $title 			= 'Students';
@@ -200,6 +221,27 @@ class tt_opps
             $priority,
             $callbackArgs
         );
+
+        //Other
+        $id 			= 'tt_meta_opp_other';
+        $title 			= 'Other Information';
+        $drawCallback 	= array( $this, 'draw_metabox_other_info' );
+        $screen 		= 'tt_opp';
+        $context 		= 'side';
+        $priority 		= 'default';
+        $callbackArgs 	= array();
+
+        add_meta_box(
+            $id,
+            $title,
+            $drawCallback,
+            $screen,
+            $context,
+            $priority,
+            $callbackArgs
+        );
+
+
 
 	}
 
@@ -226,79 +268,8 @@ class tt_opps
             }
         }
 
-        $args = array(
-            "type" => "textbox",
-            "name" => "renumeration",
-            "value" => $renumeration,
-            "ID" => "renumeration",
-            "label" => "Recognition",
-            "width" => 400,
-        );
-        echo ek_forms::form_item($args);
 
 
-
-        $args = array(
-            "type" => "textbox",
-            "name" => "primary_contact",
-            "value" => $primary_contact,
-            "ID" => "primary_contact",
-            "label" => "Primary contact name for more questions",
-            "width" => 400,
-
-        );
-        echo ek_forms::form_item($args);
-
-        $args = array(
-            "type" => "textbox",
-            "name" => "primary_contact_email",
-            "value" => $primary_contact_email,
-            "ID" => "primary_contact_email",
-            "label" => "Primary contact email for more questions",
-            "width" => 400,
-
-        );
-        echo ek_forms::form_item($args);
-
-        $args = array(
-            "type" => "textbox",
-            "name" => "interest_email_contact",
-            "value" => $interest_email_contact,
-            "ID" => "interest_email_contact",
-            "label" => "Who receives an email from expressions of interest (email address)",
-            "width" => 400,
-
-        );
-        echo ek_forms::form_item($args);
-
-
-
-
-
-        $event_types = teaching_tinder_queries::get_cat_items('tt_event_type');
-        $args = array(
-            "type" => "dropdown",
-            "name" => "event_type",
-            "value" => $event_type,
-            "ID" => "event_type",
-            "label" => "Event Type",
-            "options" => $event_types,
-        );
-        echo ek_forms::form_item($args);
-
-        $role_types = teaching_tinder_queries::get_cat_items('tt_role_type');
-        $args = array(
-            "type" => "dropdown",
-            "name" => "role_type",
-            "value" => $role_type,
-            "ID" => "role_type",
-            "label" => "Role Type",
-            "options" => $role_types,
-        );
-        echo ek_forms::form_item($args);
-
-
-        // Add dates
         $args = array(
             "type" => "textarea",
             "RTE"   => true,
@@ -307,9 +278,29 @@ class tt_opps
             "ID" => "who",
             "label" => "Who do we need?",
         );
-
         echo ek_forms::form_item($args);
 
+
+        $args = array(
+            "type" => "textarea",
+            "RTE"   => true,
+            "name" => "support",
+            "value" => $support,
+            "ID" => "support",
+            "label" => "How will I be supported?",
+        );
+        echo ek_forms::form_item($args);
+
+
+        $args = array(
+            "type" => "textarea",
+            "RTE"   => true,
+            "name" => "tasks",
+            "value" => $tasks,
+            "ID" => "tasks",
+            "label" => "What will I need to do?",
+        );
+        echo ek_forms::form_item($args);
 
 
 	}
@@ -357,6 +348,115 @@ class tt_opps
         echo ek_forms::form_item($args);
 
     }
+
+
+
+    function draw_metabox_type_meta($post, $metabox)
+    {
+
+        $item_id = $post->ID;
+
+        // GEt the post meta
+        $item_meta = get_post_meta($item_id);
+        $item_keys = tt_opps::get_meta_items();
+
+        foreach ($item_keys as $this_key)
+        {
+            $$this_key = ''; // Defualt set to blank
+            if(array_key_exists($this_key, $item_meta) )
+            {
+                $$this_key = $item_meta[$this_key][0];
+            }
+        }
+
+        $event_types = teaching_tinder_queries::get_cat_items('tt_event_type');
+        $args = array(
+            "type" => "dropdown",
+            "name" => "event_type",
+            "value" => $event_type,
+            "ID" => "event_type",
+            "label" => "Event Type",
+            "options" => $event_types,
+        );
+        echo ek_forms::form_item($args);
+
+        $role_types = teaching_tinder_queries::get_cat_items('tt_role_type');
+        $args = array(
+            "type" => "dropdown",
+            "name" => "role_type",
+            "value" => $role_type,
+            "ID" => "role_type",
+            "label" => "Role Type",
+            "options" => $role_types,
+        );
+        echo ek_forms::form_item($args);
+
+
+    }
+
+    function draw_metabox_other_info($post, $metabox)
+    {
+
+        $item_id = $post->ID;
+
+        // GEt the post meta
+        $item_meta = get_post_meta($item_id);
+        $item_keys = tt_opps::get_meta_items();
+
+        foreach ($item_keys as $this_key)
+        {
+            $$this_key = ''; // Defualt set to blank
+            if(array_key_exists($this_key, $item_meta) )
+            {
+                $$this_key = $item_meta[$this_key][0];
+            }
+        }
+
+
+        $args = array(
+            "type" => "textbox",
+            "name" => "renumeration",
+            "value" => $renumeration,
+            "ID" => "renumeration",
+            "label" => "Recognition",
+        );
+        echo ek_forms::form_item($args);
+
+
+        $args = array(
+            "type" => "textbox",
+            "name" => "primary_contact",
+            "value" => $primary_contact,
+            "ID" => "primary_contact",
+            "label" => "Primary contact name",
+
+        );
+        echo ek_forms::form_item($args);
+
+        $args = array(
+            "type" => "textbox",
+            "name" => "primary_contact_email",
+            "value" => $primary_contact_email,
+            "ID" => "primary_contact_email",
+            "label" => "Primary contact email",
+
+        );
+        echo ek_forms::form_item($args);
+
+        $args = array(
+            "type" => "textbox",
+            "name" => "interest_email_contact",
+            "value" => $interest_email_contact,
+            "ID" => "interest_email_contact",
+            "label" => "Send expressions of interest emails to:",
+
+        );
+        echo ek_forms::form_item($args);
+
+
+    }
+
+
 
 
 
@@ -432,7 +532,14 @@ class tt_opps
 
             case "cohort":
                 $cohort = get_post_meta($post_ID, 'cohort', true);
-                echo get_term( $cohort )->name;
+                if($cohort)
+                {
+                    echo get_term( $cohort )->name;
+                }
+                else
+                {
+                    echo '-';
+                }
             break;
 
             case "opp_dates":

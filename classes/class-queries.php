@@ -19,11 +19,6 @@ class teaching_tinder_queries
         }
 
 
-
-
-
-
-
         $args = array(
             'posts_per_page'   => -1,
             'orderby'           => 'title',
@@ -54,12 +49,20 @@ class teaching_tinder_queries
 
         }
 
+
+        // Get the list of items they have hidden
+        $logged_in_username = imperialNetworkUtils::get_current_username();
+
+        $hidden_opps = teaching_tinder_queries::get_user_hidden_opps($logged_in_username);
+
         $posts_array = get_posts( $args );
         $items_array = array();
 
         foreach ($posts_array as $item_info)
         {
             $post_id = $item_info->ID;
+
+            if(in_array($post_id, $hidden_opps) ){continue;} // if its hidden then skip
             $item_meta = get_post_meta($post_id);
             $item_keys = tt_opps::get_meta_items();
             foreach ($item_keys as $this_key)
@@ -153,6 +156,27 @@ class teaching_tinder_queries
 
         }
         return $date_array;
+
+    }
+
+    //Gets opps user has hidden
+    public static function get_user_hidden_opps($username)
+    {
+        global $wpdb;
+        global $tt_opp_dates_table_hidden;
+
+        $sql = "SELECT * FROM $tt_opp_dates_table_hidden WHERE username= '$username'";
+
+        $opp_items =  $wpdb->get_results( $sql );
+
+        $opp_items_array = array();
+        foreach ($opp_items as $opp_info)
+        {
+            $opp_items_array[] = $opp_info->opp_id;
+
+
+        }
+        return $opp_items_array;
 
     }
 
